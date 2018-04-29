@@ -1,0 +1,21 @@
+{
+  "main": "./App.js",
+  "private": true,
+  "dependencies": {
+    "expo": "^27.0.1",
+    "react": "16.3.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
+    "react-navigator": "^0.0.0-0"
+  },
+  "name": "loomio-react-native",
+  "version": "1.0.0",
+  "description": "A mobile app for Loomio",
+  "devDependencies": {
+    "babel-plugin-module-resolver": "latest"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Kiesel (gdpelican)",
+  "license": "ISC"
+}
