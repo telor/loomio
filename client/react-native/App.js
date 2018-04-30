@@ -1,4 +1,3 @@
-require('coffeescript/register')
 const expo = require('expo')
 
 if (__DEV__) { expo.KeepAwake() }
