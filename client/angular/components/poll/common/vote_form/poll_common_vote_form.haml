@@ -12,6 +12,6 @@
 
   %poll_common_stance_reason.animated{stance: "stance", ng-show: "selectedOptionId", ng-if: "stance"}
   .lmo-md-actions
-    %div{ng-if: "!stance.isNew()"}
-    %show_results_button{ng-if: "stance.isNew()"}
+    %div{ng-if: "!stance.isNew() || stance.poll().hideResults()"}
+    %show_results_button{ng-if: "stance.isNew() && !stance.poll().hideResults()"}
     %md-button.md-primary.md-raised.poll-common-vote-form__submit{ng-click: "submit()", translate: "poll_common.vote", ng-disabled: "!selectedOptionId"}

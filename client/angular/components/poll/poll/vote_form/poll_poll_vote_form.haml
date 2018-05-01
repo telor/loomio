@@ -13,6 +13,6 @@
   %poll_common_stance_reason.animated{stance: "stance", ng-show: "stance.poll().multipleChoice || selectedOptionIds.length", ng-if: "stance"}
 
   .poll-common-form-actions.lmo-flex.lmo-flex__space-between
-    %show_results_button{ng-if: "stance.isNew()"}
-    %div{ng-if: "!stance.isNew()"}
+    %show_results_button{ng-if: "stance.isNew() && !stance.poll().hideResults()"}
+    %div{ng-if: "!stance.isNew() || stance.poll().hideResults()"}
     %md-button.md-primary.md-raised.poll-common-vote-form__submit{ng-click: "submit()", translate: "poll_common.vote", aria-label: "{{ 'poll_poll_vote_form.vote' | translate }}"}

@@ -16,7 +16,14 @@ class Poll < ApplicationRecord
   extend  NoSpam
   no_spam_for :title, :details
 
-  set_custom_fields :meeting_duration, :time_zone, :dots_per_person, :pending_emails, :minimum_stance_choices, :can_respond_maybe, :deanonymize_after_close
+  set_custom_fields :meeting_duration,
+                    :time_zone,
+                    :dots_per_person,
+                    :pending_emails,
+                    :minimum_stance_choices,
+                    :can_respond_maybe,
+                    :deanonymize_after_close,
+                    :hide_results_until_close
 
   TEMPLATE_FIELDS = %w(material_icon translate_option_name
                        can_add_options can_remove_options author_receives_outcome

@@ -62,6 +62,9 @@ module.exports = class PollModel extends BaseModel
       when 'edit'    then @stancesCount
       else                0
 
+  hideResults: ->
+    @isActive() and @anonymous and @hideResultsUntilClose
+
   memberIds: ->
     _.uniq if @isActive()
       @formalMemberIds().concat @guestIds()

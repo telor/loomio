@@ -48,6 +48,12 @@ class PollEmailInfo
     @poll.poll_type
   end
 
+  def hide_results?
+    @poll.active? &&
+    @poll.anonymous? &&
+    @poll.hide_results_until_close?
+  end
+
   def undecided
     @undecided ||= @poll.undecided
   end

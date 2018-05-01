@@ -21,6 +21,6 @@
   %poll_common_stance_reason{stance: "stance"}
 
   .poll-common-form-actions.lmo-flex.lmo-flex__space-between
-    %show_results_button{ng-if: "stance.isNew()"}
-    %div{ng-if: "!stance.isNew()"}
+    %show_results_button{ng-if: "stance.isNew() && !stance.poll().hideResults()"}
+    %div{ng-if: "!stance.isNew() || stance.poll().hideResults()"}
     %md-button.md-primary.md-raised.poll-common-vote-form__submit{type: "submit", ng-disabled: "tooManyDots()", translate: "poll_common.vote", aria-label: "{{ 'poll_poll_vote_form.vote' | translate }}"}

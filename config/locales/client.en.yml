@@ -1259,6 +1259,9 @@ en:
     anonymous:
       title: Anonymous voters
       helptext_on: When selected, participant info will not be shown with each response.
+    hide_results_until_close:
+      title: Hide results until close
+      helptext_on: When selected, results will be hidden until after the poll closes
     deanonymize_after_close:
       title: Reveal voters after close
       helptext_on: When selected, anonymous voters will be revealed after the poll closes
