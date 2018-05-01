@@ -5,6 +5,7 @@ sequence = require 'gulp-run-sequence'
 angular = require './tasks/angular'
 e2e     = require './tasks/e2e'
 vue     = require './tasks/vue'
+react   = require './tasks/react-native'
 execjs  = require './tasks/execjs'
 shared  = require './tasks/shared'
 
@@ -15,17 +16,20 @@ gulp.task 'shared:moment_locales', shared.moment_locales
 
 gulp.task 'angular:external', ['angular:haml', 'angular:scss', 'shared:emoji', 'shared:moment_locales']
 
-gulp.task 'angular:bundle:dev',     angular.development
-gulp.task 'angular:bundle:prod',    angular.production
+gulp.task 'angular:bundle:dev',       angular.development
+gulp.task 'angular:bundle:prod',      angular.production
 
-gulp.task 'execjs:bundle:dev',      execjs.development
-gulp.task 'execjs:bundle:prod',     execjs.production
+gulp.task 'execjs:bundle:dev',        execjs.development
+gulp.task 'execjs:bundle:prod',       execjs.production
 
-gulp.task 'vue:bundle:dev',         vue.development
-gulp.task 'vue:bundle:prod',        vue.production
+gulp.task 'vue:bundle:dev',           vue.development
+gulp.task 'vue:bundle:prod',          vue.production
 
-gulp.task 'bundle:dev',  ['angular:bundle:dev',  'execjs:bundle:dev',  'vue:bundle:dev']
-gulp.task 'bundle:prod', ['angular:bundle:prod', 'execjs:bundle:prod', 'vue:bundle:prod']
+gulp.task 'react-native:bundle:dev',  react.development
+gulp.task 'react-native:bundle:prod', react.production
+
+gulp.task 'bundle:dev',  ['angular:bundle:dev',  'execjs:bundle:dev',  'react-native:bundle:dev',  'vue:bundle:dev']
+gulp.task 'bundle:prod', ['angular:bundle:prod', 'execjs:bundle:prod', 'react-native:bundle:prod', 'vue:bundle:prod']
 
 gulp.task 'dev',         (done) -> sequence('angular:external', 'bundle:dev', 'watch', -> done())
 gulp.task 'compile',     (done) -> sequence('angular:external', 'bundle:prod', -> done())

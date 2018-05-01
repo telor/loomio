@@ -13,6 +13,11 @@
   "devDependencies": {
     "babel-plugin-module-resolver": "latest"
   },
+  "babel": {
+    "plugins": [
+      ["module-resolver", { "extensions": [".coffee"] }]
+    ]
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

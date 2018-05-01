@@ -1,9 +1,9 @@
 React          = require 'react'
 { View, Text } = require 'react-native'
-styles         = require 'react-native/app/styles'
+{ dashboard }  = require './screen_styles'
 
 module.exports = class DashboardPage extends React.Component
   render: ->
-    <View style={styles.container}>
+    <View style={dashboard.view}>
       <Text>Dashboard!</Text>
     </View>

@@ -63,6 +63,10 @@ module.exports =
     main:           'vue/main.coffee'
     vue:            'vue/components/*.vue'
 
+  reactNative:
+    main:           'react-native/src/**/*.coffee'
+    dist:           'react-native/dist'
+
   nightwatch:
     config:
       core:        'angular/test/nightwatch.core.json'

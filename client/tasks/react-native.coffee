@@ -8,17 +8,17 @@ paths   = require './paths'
 
 module.exports =
   development: ->
-    pipe gulp.src(paths.react.main), [
+    pipe gulp.src(paths.reactNative.main), [
       plumber(errorHandler: onError),
       cjsx(bare: true)
-      rename('App.js')
-      gulp.dest(paths.react.dist)
+      rename((path) -> path.extname = '.js')
+      gulp.dest(paths.reactNative.dist)
     ]
 
   production: ->
-    pipe gulp.src(paths.react.main), [
+    pipe gulp.src(paths.reactNative.main), [
       plumber(errorHandler: onError),
       cjsx(bare: true)
-      rename('App.js')
-      gulp.dest(paths.react.dist)
+      rename((path) -> path.extname = '.js')
+      gulp.dest(paths.reactNative.dist)
     ]

@@ -1,9 +1,9 @@
 React          = require 'react'
 { View, Text } = require 'react-native'
-styles         = require 'react-native/app/styles'
+{ group }      = require './screen_styles'
 
 module.exports = class GroupPage extends React.Component
   render: ->
-    <View style={styles.container}>
+    <View style={group.view}>
       <Text>Group page!</Text>
     </View>

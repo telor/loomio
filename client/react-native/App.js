@@ -1,5 +1,2 @@
-const expo = require('expo')
-
-if (__DEV__) { expo.KeepAwake() }
-
-module.exports = require('react-native/app/setup.coffee').setupReactNative()
+if (__DEV__) { require('expo').KeepAwake() }
+module.exports = require('./src/setup')
