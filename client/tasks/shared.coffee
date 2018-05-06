@@ -1,5 +1,6 @@
 gulp    = require 'gulp'
 pipe    = require 'gulp-pipe'
+coffee  = require 'gulp-coffee'
 replace = require 'gulp-replace'
 paths   = require './paths.coffee'
 

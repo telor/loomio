@@ -65,6 +65,7 @@ module.exports =
 
   reactNative:
     main:           'react-native/src/**/*.coffee'
+    shared:         'react-native/dist/shared'
     dist:           'react-native/dist'
 
   nightwatch:
