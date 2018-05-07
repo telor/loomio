@@ -1084,6 +1084,23 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
+coffee-react-jstransform@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/coffee-react-jstransform/-/coffee-react-jstransform-1.0.0.tgz#d3d343cede33c8f2b2ea37cb7fa0f84987236214"
+
+coffee-react-transform@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/coffee-react-transform/-/coffee-react-transform-4.0.0.tgz#731a79fd445a56e93926c72e983eff937f7c6fde"
+
+coffee-react@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/coffee-react/-/coffee-react-5.0.1.tgz#3d03566e8646894c962193c42c2e895f91f49ecb"
+  dependencies:
+    coffee-react-jstransform "^1.0.0"
+    coffee-react-transform "^4.0.0"
+    coffee-script "^1.10.0"
+    mkdirp "^0.5.0"
+
 coffee-script@^1.10.0:
   version "1.12.7"
   resolved "https://registry.yarnpkg.com/coffee-script/-/coffee-script-1.12.7.tgz#c05dae0cb79591d05b3070a8433a98c9a89ccc53"
@@ -2375,6 +2392,16 @@ gulp-autoprefixer@^4.0.0:
     through2 "^2.0.0"
     vinyl-sourcemaps-apply "^0.2.0"
 
+gulp-cjsx@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-cjsx/-/gulp-cjsx-4.1.0.tgz#4034ea7780c3fee4bba4a3ee20af947297f30cb7"
+  dependencies:
+    coffee-react "^5.0.0"
+    gulp-util "^3.0.4"
+    merge "^1.2.0"
+    through2 "^2.0.1"
+    vinyl-sourcemaps-apply "^0.2.1"
+
 gulp-coffee@^2.3.1:
   version "2.3.5"
   resolved "https://registry.yarnpkg.com/gulp-coffee/-/gulp-coffee-2.3.5.tgz#8c64e9ac884e1bab4e20b66ac7c386a816859041"
@@ -2549,7 +2576,7 @@ gulp-uglify@^3.0.0:
     uglify-js "^3.0.5"
     vinyl-sourcemaps-apply "^0.2.0"
 
-gulp-util@*, gulp-util@^3, gulp-util@^3.0, gulp-util@^3.0.0, gulp-util@^3.0.1, gulp-util@^3.0.2, gulp-util@^3.0.7:
+gulp-util@*, gulp-util@^3, gulp-util@^3.0, gulp-util@^3.0.0, gulp-util@^3.0.1, gulp-util@^3.0.2, gulp-util@^3.0.4, gulp-util@^3.0.7:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/gulp-util/-/gulp-util-3.0.8.tgz#0054e1e744502e27c04c187c3ecc505dd54bbb4f"
   dependencies:
