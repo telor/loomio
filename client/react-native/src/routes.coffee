@@ -1,9 +1,12 @@
+React              = require 'react'
 { StackNavigator } = require 'react-navigation'
 
-module.exports = ->
-  StackNavigator(
-    Dashboard: { screen: require './screens/group_screen' }
-    Group:     { screen: require './screens/dashboard_screen' }
+Routes = StackNavigator(
+  Dashboard: { screen: require './screens/group_screen' }
+  Group:     { screen: require './screens/dashboard_screen' }
   ,
-    initialRouteName: 'Dashboard'
-  )
+  initialRouteName: 'Dashboard'
+)
+
+module.exports = class Loomio extends React.Component
+  render: -> <Routes />
