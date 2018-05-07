@@ -5,7 +5,7 @@
     "expo": "^27.0.1",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
-    "react-navigator": "^0.0.0-0"
+    "react-navigation": "^2.0.0-rc.9"
   },
   "name": "loomio-react-native",
   "version": "1.0.0",
@@ -15,7 +15,10 @@
   },
   "babel": {
     "plugins": [
-      ["module-resolver", { "extensions": [".coffee"] }]
+      ["module-resolver", {
+        "alias": { "shared": "loomio-react-native/dist/shared" },
+        "extensions": [".js", ".coffee"]
+      }]
     ]
   },
   "scripts": {

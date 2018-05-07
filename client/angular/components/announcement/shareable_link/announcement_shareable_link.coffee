@@ -1,5 +1,5 @@
-LmoUrlService = require 'shared/services/lmo_url_service.coffee'
-FlashService  = require 'shared/services/flash_service.coffee'
+LmoUrlService = require 'shared/services/lmo_url_service'
+FlashService  = require 'shared/services/flash_service'
 
 angular.module('loomioApp').directive 'announcementShareableLink', ->
   scope: {model: '='}

@@ -1,2 +1,2 @@
 if (__DEV__) { require('expo').KeepAwake() }
-module.exports = require('./src/setup')
+module.exports = require('loomio-react-native/dist/setup')

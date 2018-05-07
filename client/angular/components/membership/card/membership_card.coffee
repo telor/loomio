@@ -1,7 +1,7 @@
-Records        = require 'shared/services/records.coffee'
-AbilityService = require 'shared/services/ability_service.coffee'
-ModalService   = require 'shared/services/modal_service.coffee'
-RecordLoader   = require 'shared/services/record_loader.coffee'
+Records        = require 'shared/services/records'
+AbilityService = require 'shared/services/ability_service'
+ModalService   = require 'shared/services/modal_service'
+RecordLoader   = require 'shared/services/record_loader'
 
 angular.module('loomioApp').directive 'membershipCard', ->
   scope: {group: '=', pending: "=?"}

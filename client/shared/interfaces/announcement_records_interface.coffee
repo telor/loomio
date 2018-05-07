@@ -1,5 +1,5 @@
-BaseRecordsInterface = require 'shared/record_store/base_records_interface.coffee'
-AnnouncementModel    = require 'shared/models/announcement_model.coffee'
+BaseRecordsInterface = require 'shared/record_store/base_records_interface'
+AnnouncementModel    = require 'shared/models/announcement_model'
 
 module.exports = class AnnouncementRecordsInterface extends BaseRecordsInterface
   model: AnnouncementModel
