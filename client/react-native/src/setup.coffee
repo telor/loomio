@@ -1,6 +1,8 @@
 LmoUrlService = require 'shared/services/lmo_url_service'
+{ KeepAwake } = require 'expo'
 
-module.exports =
-  setup: ->
-    LmoUrlService.setGoToMethod = (current, next, opts = {})->
-      current.props.navigation.navigate(next, opts)
+module.exports = ->
+  KeepAwake() if __DEV__
+
+  LmoUrlService.setGoToMethod = (current, next, opts = {}) ->
+    current.props.navigation.navigate(next, opts)

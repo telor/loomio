@@ -1,5 +1,6 @@
-if (__DEV__) { require('expo').KeepAwake() }
+const { AppRegistry } = require('react-native')
+const Setup           = require('loomio-react-native/dist/setup')
+const App             = require('loomio-react-native/dist/app')
 
-require('loomio-react-native/dist/setup').setup()
-
-module.exports = require('loomio-react-native/dist/routes')
+Setup()
+AppRegistry.registerComponent('main', () => App)
