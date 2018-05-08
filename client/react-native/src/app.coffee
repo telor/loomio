@@ -1,4 +1,4 @@
-React                     = require 'react'
+React    = require 'react'
 {
   createDrawerNavigator,
   createStackNavigator
@@ -6,9 +6,16 @@ React                     = require 'react'
 
 
 Drawer = createDrawerNavigator(
-  Decisions:   { screen: require './screens/decisions_screen' }
-  Recent:      { screen: require './screens/recent_screen' }
-  Inbox:       { screen: require './screens/inbox_screen' }
+  Decisions:
+    screen: require './screens/decisions_screen'
+    navigationOptions: ->
+      title: 'Decisions'
+  Recent:
+    screen: require './screens/recent_screen'
+  Inbox:
+    screen: require './screens/inbox_screen'
+,
+  initialRouteName: 'Recent'
 )
 
 RootStack = createStackNavigator(
@@ -17,8 +24,8 @@ RootStack = createStackNavigator(
   headerMode: 'float'
   navigationOptions: ->
     headerStyle:
-      backgroundColor: '#4C3E54'
-    title: 'Welcome!'
+      backgroundColor: '#FFA726'
+    title: 'Loomio'
     headerTintColor: 'white'
 )
 
