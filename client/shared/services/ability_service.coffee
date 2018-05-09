@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 AppConfig     = require 'shared/services/app_config'
 Records       = require 'shared/services/records'
 Session       = require 'shared/services/session'

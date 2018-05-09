@@ -8,7 +8,7 @@ IntercomService = require 'shared/services/intercom_service.coffee'
 { signIn }                                       = require 'shared/helpers/user.coffee'
 { viewportSize, trackEvents, deprecatedBrowser } = require 'shared/helpers/window.coffee'
 { broadcastKeyEvent, registerHotkeys }           = require 'shared/helpers/keyboard.coffee'
-{ scrollTo, setCurrentComponent }                = require 'shared/helpers/layout.coffee'
+{ scrollTo, setCurrentComponent }                = require 'shared/helpers/window.coffee'
 { initLiveUpdate }                               = require 'shared/helpers/cable.coffee'
 { setupAngular }                                 = require 'angular/setup.coffee'
 

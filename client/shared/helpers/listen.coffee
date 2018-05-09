@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 Records  = require 'shared/services/records'
 Session  = require 'shared/services/session'
 EventBus = require 'shared/services/event_bus'

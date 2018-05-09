@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 RestfulClient = require './restful_client'
 utils         = require './utils'
 

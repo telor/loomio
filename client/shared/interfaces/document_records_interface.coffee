@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 BaseRecordsInterface = require 'shared/record_store/base_records_interface'
 DocumentModel        = require 'shared/models/document_model'
 

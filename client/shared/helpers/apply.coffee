@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 EventBus      = require 'shared/services/event_bus'
 LmoUrlService = require 'shared/services/lmo_url_service'
 

@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 module.exports =
   audiencesFor: (model) ->
     _.compact [

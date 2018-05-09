@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 Records            = require 'shared/services/records'
 Session            = require 'shared/services/session'
 ThreadQueryService = require 'shared/services/thread_query_service'

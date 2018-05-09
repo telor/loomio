@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 utils  = require './utils'
 
 module.exports =

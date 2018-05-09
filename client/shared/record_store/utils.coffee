@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 module.exports =
   new class Utils
     parseJSONList: (data) -> _.map(data, @parseJSON)

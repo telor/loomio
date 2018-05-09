@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 moment  = require 'moment-timezone'
 
 module.exports = do ->

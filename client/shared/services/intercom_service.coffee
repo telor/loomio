@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 AppConfig     = require 'shared/services/app_config'
 Session       = require 'shared/services/session'
 LmoUrlService = require 'shared/services/lmo_url_service'

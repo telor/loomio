@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 module.exports =
   class RecordStore
     constructor: (db) ->

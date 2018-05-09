@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 AppConfig             = require 'shared/services/app_config'
 ImplementationService = require 'shared/services/implementation_service'
 

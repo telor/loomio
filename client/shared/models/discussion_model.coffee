@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 BaseModel        = require 'shared/record_store/base_model'
 AppConfig        = require 'shared/services/app_config'
 RangeSet         = require 'shared/services/range_set'

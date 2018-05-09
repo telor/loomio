@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 Records = require 'shared/services/records'
 
 # a series of helpers related to getting a translation string to translate, such

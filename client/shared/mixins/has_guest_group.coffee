@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 module.exports = new class HasGuestGroup
   apply: (model) ->
     model.guestGroup = ->

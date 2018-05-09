@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 Records = require 'shared/services/records'
 
 module.exports = class RecordLoader
