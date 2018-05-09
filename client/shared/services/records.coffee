@@ -1,8 +1,9 @@
 RecordStore = require 'shared/record_store/record_store'
 AppConfig   = require 'shared/services/app_config'
 loki        = require 'lokijs'
+ReactNativeAdapter = require 'loki-react-native-adapter'
 
-db      = new loki('default.db')
+db      = new loki 'default.db', new ReactNativeAdapter()
 records = new RecordStore(db)
 
 records.addRecordsInterface require('shared/interfaces/announcement_records_interface')

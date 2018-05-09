@@ -1,5 +1,9 @@
-bowser = require 'bowser'
-window.bowser = bowser
+require('promise.prototype.finally').shim()                   # polyfill for Promise.finally
+require 'whatwg-fetch'                                        # polyfill for Fetch API
+
+PromisePolyfill = require 'promise-polyfill'
+bowser          = require 'bowser'
+window.bowser   = bowser
 
 # a series of helpers related to the current browser window, such as the viewport size
 # or printing. Hopefully we can pool all window-related functionality here, and
@@ -13,6 +17,7 @@ module.exports =
     bowser.msie and parseInt(bowser.version) <= 11
 
   exportGlobals: ->
+    window.Promise = window.Promise or PromisePolyfill # polyfill for Promise object
     window.moment = require 'moment'
     window._      = require 'lodash'
     _.extend window._, require 'shared/helpers/lodash_ext'

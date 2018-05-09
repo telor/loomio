@@ -1,7 +1,3 @@
-window.Promise = window.Promise or require 'promise-polyfill' # polyfill for Promise object
-require('promise.prototype.finally').shim()                   # polyfill for Promise.finally
-require 'whatwg-fetch'                                        # polyfill for Fetch API
-
 module.exports =
   class RestfulClient
     defaultParams: {}
