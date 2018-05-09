@@ -122,4 +122,8 @@ class PermittedParams < Struct.new(:params)
   def document_attributes
     [:url, :title, :model_id, :model_type, :file, :filename]
   end
+
+  def device_attributes
+    [:token]
+  end
 end

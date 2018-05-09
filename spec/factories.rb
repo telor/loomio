@@ -308,4 +308,8 @@ FactoryBot.define do
     body "FORWARDED MESSAGE------ TO: Mary <mary@example.com>, beth@example.com, Tim <tim@example.com> SUBJECT: We're having an argument! blahblahblah"
   end
 
+  factory :device do
+    user
+    token "abcd"
+  end
 end

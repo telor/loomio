@@ -97,6 +97,7 @@ Loomio::Application.routes.draw do
     end
 
     resources :login_tokens, only: [:create]
+    resources :devices, only: [:create, :destroy]
 
     resources :events, only: :index do
       get :comment, on: :collection

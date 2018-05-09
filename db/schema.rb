@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424011230) do
+ActiveRecord::Schema.define(version: 20180509123416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,15 @@ ActiveRecord::Schema.define(version: 20180424011230) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
     t.index ["priority"], name: "index_delayed_jobs_on_priority"
     t.index ["run_at", "locked_at", "locked_by", "failed_at"], name: "index_delayed_jobs_on_ready"
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.string "token", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_devices_on_token"
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "discussion_readers", id: :serial, force: :cascade do |t|
