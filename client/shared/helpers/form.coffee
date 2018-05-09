@@ -3,10 +3,10 @@ AbilityService = require 'shared/services/ability_service'
 Records        = require 'shared/services/records'
 Session        = require 'shared/services/session'
 FlashService   = require 'shared/services/flash_service'
+ScrollService  = require 'shared/services/scroll_service'
 
 { signIn }            = require 'shared/helpers/user'
 { fieldFromTemplate } = require 'shared/helpers/poll'
-{ scrollTo }          = require 'shared/helpers/window'
 
 # a helper to aid submitting forms throughout the app
 module.exports =
@@ -17,7 +17,7 @@ module.exports =
     submit(scope, model, _.merge(
       flashSuccess: "discussion_form.messages.#{actionName(model)}"
       failureCallback: ->
-        scrollTo '.lmo-validation-error__message', container: '.discussion-modal'
+        ScrollService.scrollTo '.lmo-validation-error__message', container: '.discussion-modal'
       successCallback: (data) ->
         _.invoke Records.documents.find(model.removedDocumentIds), 'remove'
         nextOrSkip(data, scope, model)
@@ -27,7 +27,7 @@ module.exports =
     submit(scope, model, _.merge(
       flashSuccess: "poll_common_outcome_form.outcome_#{actionName(model)}"
       failureCallback: ->
-        scrollTo '.lmo-validation-error__message', container: '.poll-common-modal'
+        ScrollService.scrollTo '.lmo-validation-error__message', container: '.poll-common-modal'
       successCallback: (data) ->
         nextOrSkip(data, scope, model)
     , options))
@@ -39,7 +39,7 @@ module.exports =
         EventBus.emit scope, 'processing'
       successCallback: (data) ->
         model.poll().clearStaleStances()
-        scrollTo '.poll-common-card__results-shown'
+        ScrollService.scrollTo '.poll-common-card__results-shown'
         EventBus.emit scope, 'stanceSaved'
         signIn(data, data.stances[0].participant_id, -> EventBus.emit scope, 'loggedIn') unless Session.user().emailVerified
       cleanupFn: ->
@@ -62,7 +62,7 @@ module.exports =
           else
             model.addOption()
       failureCallback: ->
-        scrollTo '.lmo-validation-error__message', container: '.poll-common-modal'
+        ScrollService.scrollTo '.lmo-validation-error__message', container: '.poll-common-modal'
       successCallback: (data) ->
         _.invoke Records.documents.find(model.removedDocumentIds), 'remove'
         model.removeOrphanOptions()

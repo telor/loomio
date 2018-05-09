@@ -5,8 +5,6 @@ LmoUrlService = require 'shared/services/lmo_url_service'
 
 exceptionHandler = require 'shared/helpers/exception_handler'
 
-{ hardReload } = require 'shared/helpers/window'
-
 module.exports = new class Session
   signIn: (userId, invitationToken) ->
     setDefaultParams(invitation_token: invitationToken)
@@ -23,7 +21,7 @@ module.exports = new class Session
 
   signOut: ->
     AppConfig.loggingOut = true
-    Records.sessions.remote.destroy('').then -> hardReload('/')
+    Records.sessions.remote.destroy('')
 
   user: ->
     Records.users.find(AppConfig.currentUserId) or Records.users.build()

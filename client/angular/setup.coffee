@@ -30,11 +30,14 @@ module.exports =
 
 setupAngularScroll = ->
   ScrollService.setScrollMethod (elem, container, options = {}) ->
+    elem = document.querySelector(target)
+    container = document.querySelector(options.container or '.lmo-main-content')
     return unless elem and container
-    options.offset = document.documentElement.clientHeight - (options.offset or 100) if options.bottom
-    angular.element(container).scrollToElement(elem, options.offset or 50, options.speed or 100).then ->
-      angular.element(window).triggerHandler('checkInView')
-      elem.focus()
+    setTimeout ->
+      options.offset = document.documentElement.clientHeight - (options.offset or 100) if options.bottom
+      angular.element(container).scrollToElement(elem, options.offset or 50, options.speed or 100).then ->
+        angular.element(window).triggerHandler('checkInView')
+        elem.focus()
 
 setupAngularEventBus = ->
   EventBus.setEmitMethod (scope, event, opts) ->

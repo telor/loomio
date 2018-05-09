@@ -4,6 +4,7 @@ AuthService = require 'shared/services/auth_service'
 I18n        = require 'shared/services/i18n'
 
 { submitOnEnter } = require 'shared/helpers/keyboard'
+{ hardReload }    = require 'shared/helpers/window'
 
 angular.module('loomioApp').directive 'authSignupForm', ->
   scope: {user: '='}
@@ -20,7 +21,9 @@ angular.module('loomioApp').directive 'authSignupForm', ->
         $scope.user.errors = {}
         EventBus.emit $scope, 'processing'
         $scope.user.name  = $scope.vars.name
-        AuthService.signUp($scope.user).finally -> EventBus.emit $scope, 'doneProcessing'
+        AuthService.signUp($scope.user)
+          .then    -> if user.hasToken then hardReload() else user.sentLoginLink = true
+          .finally -> EventBus.emit $scope, 'doneProcessing'
       else
         $scope.user.errors =
           name: [I18n.t('auth_form.name_required')]

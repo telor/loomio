@@ -2,7 +2,8 @@ AppConfig       = require 'shared/services/app_config'
 Session         = require 'shared/services/session'
 UserHelpService = require 'shared/services/user_help_service'
 
-{ contactUs } = require 'shared/helpers/user'
+{ contactUs }  = require 'shared/helpers/user'
+{ hardReload } = require 'shared/helpers/window'
 
 angular.module('loomioApp').directive 'userDropdown', ->
   restrict: 'E'
@@ -14,7 +15,7 @@ angular.module('loomioApp').directive 'userDropdown', ->
     $scope.user = Session.user()
 
     $scope.signOut = ->
-      Session.signOut()
+      Session.signOut().then -> hardReload('/')
 
     $scope.helpLink = ->
       UserHelpService.helpLink()

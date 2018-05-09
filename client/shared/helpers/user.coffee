@@ -7,8 +7,6 @@ IntercomService = require 'shared/services/intercom_service'
 ModalService   = require 'shared/services/modal_service'
 I18n           = require 'shared/services/i18n'
 
-{ hardReload } = require 'shared/helpers/window'
-
 # A series of actions relating to updating the current user, such as signing in
 # or changing the app's locale
 module.exports =
@@ -16,10 +14,6 @@ module.exports =
     Records.import(data)
     Session.signIn(userId, LmoUrlService.params().invitation_token)
     afterSignIn()
-
-  signOut: ->
-    AppConfig.loggingOut = true
-    Records.sessions.remote.destroy('').then -> hardReload('/')
 
   getProviderIdentity: ->
     validProviders = _.pluck(AppConfig.identityProviders, 'name')

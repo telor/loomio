@@ -6,6 +6,7 @@ bowser          = require 'bowser'
 window.bowser   = bowser
 
 AppConfig       = require 'shared/services/app_config'
+ScrollService   = require 'shared/services/scroll_service'
 
 # a series of helpers related to the current browser window, such as the viewport size
 # or printing. Hopefully we can pool all window-related functionality here, and

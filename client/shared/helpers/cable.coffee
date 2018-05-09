@@ -8,8 +8,6 @@ FlashService   = require 'shared/services/flash_service'
 AuthService    = require 'shared/services/auth_service'
 AbilityService = require 'shared/services/ability_service'
 
-{ hardReload } = require 'shared/helpers/window'
-
 module.exports = {
   subscribeTo: (model) ->
     subscribeTo(model)
@@ -21,7 +19,7 @@ module.exports = {
       subscribeToUser()
       _.each Session.user().groups(), subscribeToGroup
     else
-      subscribeToMembership()
+      # subscribeToMembership()
 }
 
 subscribeTo = (model) ->
@@ -45,6 +43,7 @@ subscribeToUser = ->
       if data.action? && !AppConfig.loggingOut
         AppConfig.loggingOut = true
         ModalService.open 'ConfirmModal', confirm: ->
+          # TODO force reload on web here
           submit:      Session.signOut
           forceSubmit: true
           text:
@@ -52,12 +51,12 @@ subscribeToUser = ->
             helptext: "signed_out_modal.message"
       Records.import(data)
 
-subscribeToMembership = ->
-  return unless AppConfig.pendingIdentity.type == 'membership'
-  ensureConnection().subscriptions.create { channel: "MembershipChannel", token: AppConfig.pendingIdentity.token },
-    received: (data) ->
-      switch data.action
-        when 'accepted' then AuthService.signIn().then -> hardReload()
+# subscribeToMembership = ->
+#   return unless AppConfig.pendingIdentity.type == 'membership'
+#   ensureConnection().subscriptions.create { channel: "MembershipChannel", token: AppConfig.pendingIdentity.token },
+#     received: (data) ->
+#       switch data.action
+#         when 'accepted' then AuthService.signIn().then -> hardReload()
 
 subscribeToPoll = (poll) ->
   ensureConnection().subscriptions.create { channel: "PollChannel", poll_id: poll.id },

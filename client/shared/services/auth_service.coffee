@@ -1,8 +1,6 @@
 AppConfig = require 'shared/services/app_config'
 Records   = require 'shared/services/records'
 
-{ hardReload } = require 'shared/helpers/window'
-
 module.exports = new class AuthService
 
   emailStatus: (user) ->
@@ -20,11 +18,7 @@ module.exports = new class AuthService
     Records.sessions.build(name: user.name, email: user.email, password: user.password).save()
 
   signUp: (user) ->
-    Records.registrations.build(email: user.email, name: user.name, recaptcha: user.recaptcha).save().then ->
-      if user.hasToken
-        hardReload()
-      else
-        user.sentLoginLink = true
+    Records.registrations.build(email: user.email, name: user.name, recaptcha: user.recaptcha).save()
 
   confirmOauth: ->
     Records.registrations.remote.post('oauth')
