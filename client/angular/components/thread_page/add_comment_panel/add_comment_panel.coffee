@@ -3,7 +3,7 @@ EventBus       = require 'shared/services/event_bus'
 AbilityService = require 'shared/services/ability_service'
 ModalService   = require 'shared/services/modal_service'
 
-{ scrollTo } = require 'shared/helpers/layout'
+{ scrollTo } = require 'shared/helpers/window'
 
 angular.module('loomioApp').directive 'addCommentPanel', ['$timeout', ($timeout) ->
   scope: {eventWindow: '=', parentEvent: '='}

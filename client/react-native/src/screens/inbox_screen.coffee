@@ -1,7 +1,7 @@
 React          = require 'react'
 { View, Text } = require 'react-native'
 { inbox }      = require './screen_styles'
-InboxService   = require 'shared/services/records'
+InboxService   = require 'shared/services/inbox_service'
 
 module.exports = class InboxScreen extends React.Component
   render: ->
@@ -9,5 +9,5 @@ module.exports = class InboxScreen extends React.Component
       <Text>Unread threads!</Text>
     </View>
 
-  willMountComponent: ->
-    InboxService.load()
+  willRenderComponent: ->
+    InboxService.load().then(console.log)

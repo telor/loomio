@@ -6,7 +6,7 @@ FlashService   = require 'shared/services/flash_service'
 
 { signIn }            = require 'shared/helpers/user'
 { fieldFromTemplate } = require 'shared/helpers/poll'
-{ scrollTo }          = require 'shared/helpers/layout'
+{ scrollTo }          = require 'shared/helpers/window'
 
 # a helper to aid submitting forms throughout the app
 module.exports =

@@ -9,7 +9,7 @@ FlashService   = require 'shared/services/flash_service'
 I18n           = require 'shared/services/i18n'
 
 { listenForTranslations, listenForReactions } = require 'shared/helpers/listen'
-{ scrollTo }                                  = require 'shared/helpers/layout'
+{ scrollTo }                                  = require 'shared/helpers/window'
 
 angular.module('loomioApp').directive 'contextPanel', ['$rootScope', 'clipboard', ($rootScope, clipboard) ->
   scope: {discussion: '='}

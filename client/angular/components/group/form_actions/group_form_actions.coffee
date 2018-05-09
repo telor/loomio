@@ -2,7 +2,7 @@ Records  = require 'shared/services/records'
 EventBus = require 'shared/services/event_bus'
 I18n     = require 'shared/services/i18n'
 
-{ scrollTo }            = require 'shared/helpers/layout'
+{ scrollTo }            = require 'shared/helpers/window'
 { submitForm }          = require 'shared/helpers/form'
 { groupPrivacyConfirm } = require 'shared/helpers/helptext'
 { submitOnEnter }       = require 'shared/helpers/keyboard'
