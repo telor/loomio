@@ -2,7 +2,7 @@ class PermittedParams < Struct.new(:params)
   MODELS = %w(
     user membership_request membership poll outcome
     stance invitation group_request group discussion discussion_reader comment
-    contact_message user_deactivation_response announcement document
+    contact_message user_deactivation_response announcement document device
     draft oauth_application group_identity contact_request reaction
   )
 

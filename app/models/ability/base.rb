@@ -3,6 +3,7 @@ module Ability
     include CanCan::Ability
     prepend Ability::Comment
     prepend Ability::ContactRequest
+    prepend Ability::Device
     prepend Ability::DiscussionReader
     prepend Ability::Discussion
     prepend Ability::Document
