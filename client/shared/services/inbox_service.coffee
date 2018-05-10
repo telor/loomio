@@ -15,6 +15,7 @@ module.exports = new class InboxService
   ],
 
   load: (options = {}) ->
+    console.log 'fetching inbox...'
     Records.discussions.fetchInbox(options).then => @loaded = true
 
   unreadCount: ->

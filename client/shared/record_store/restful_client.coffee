@@ -4,6 +4,7 @@ module.exports =
   class RestfulClient
     defaultParams: {}
     currentUpload: null
+    apiHost: 'http://localhost:3000'
     apiPrefix: "/api/v1"
 
     # override these to set default actions
@@ -18,7 +19,7 @@ module.exports =
       @resourcePlural = _.snakeCase(resourcePlural)
 
     buildUrl: (path, params) ->
-      path = _.compact([@apiPrefix, @resourcePlural, path]).join('/')
+      path = _.compact([@apiHost, @apiPrefix, @resourcePlural, path]).join('/')
       return path unless params?
 
       # note to self, untested function.. you'll probably hate yourself for rewriting this rn
@@ -60,11 +61,13 @@ module.exports =
       delete opts.body if method == 'GET'
       @onPrepare()
       fetch(path, opts).then (response) =>
+        console.log 'success', response
         if response.ok
           @onSuccess(response)
         else
           @onFailure(response)
       , (response) =>
+        console.log 'failure', response
         @onFailure(response)
       .finally(@onCleanup)
 

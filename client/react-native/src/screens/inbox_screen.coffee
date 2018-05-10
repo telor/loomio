@@ -9,5 +9,5 @@ module.exports = class InboxScreen extends React.Component
       <Text>Unread threads!</Text>
     </View>
 
-  willRenderComponent: ->
+  componentDidMount: ->
     InboxService.load().then(console.log)

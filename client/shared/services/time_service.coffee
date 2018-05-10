@@ -1,4 +1,5 @@
 _ = require 'lodash'
+moment = require 'moment'
 
 AppConfig = require 'shared/services/app_config'
 

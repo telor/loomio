@@ -1,3 +1,5 @@
+moment = require 'moment'
+
 BaseRecordsInterface = require 'shared/record_store/base_records_interface'
 DiscussionModel      = require 'shared/models/discussion_model'
 
@@ -22,6 +24,7 @@ module.exports = class DiscussionRecordsInterface extends BaseRecordsInterface
       params: options
 
   fetchInbox: (options = {}) ->
+    console.log 'fetching inbox...'
     @fetch
       path: 'inbox'
       params:

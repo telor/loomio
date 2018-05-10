@@ -1,4 +1,5 @@
 _ = require 'lodash'
+moment = require 'moment'
 
 BaseModel        = require 'shared/record_store/base_model'
 AppConfig        = require 'shared/services/app_config'
