@@ -61,13 +61,11 @@ module.exports =
       delete opts.body if method == 'GET'
       @onPrepare()
       fetch(path, opts).then (response) =>
-        console.log 'success', response
         if response.ok
           @onSuccess(response)
         else
           @onFailure(response)
       , (response) =>
-        console.log 'failure', response
         @onFailure(response)
       .finally(@onCleanup)
 
