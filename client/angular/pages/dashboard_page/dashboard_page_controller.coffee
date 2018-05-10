@@ -1,11 +1,13 @@
-AppConfig          = require 'shared/services/app_config.coffee'
-Records            = require 'shared/services/records.coffee'
-Session            = require 'shared/services/session.coffee'
-EventBus           = require 'shared/services/event_bus.coffee'
-AbilityService     = require 'shared/services/ability_service.coffee'
-RecordLoader       = require 'shared/services/record_loader.coffee'
-ThreadQueryService = require 'shared/services/thread_query_service.coffee'
-ModalService       = require 'shared/services/modal_service.coffee'
+AppConfig          = require 'shared/services/app_config'
+Records            = require 'shared/services/records'
+Session            = require 'shared/services/session'
+EventBus           = require 'shared/services/event_bus'
+AbilityService     = require 'shared/services/ability_service'
+RecordLoader       = require 'shared/services/record_loader'
+ThreadQueryService = require 'shared/services/thread_query_service'
+ModalService       = require 'shared/services/modal_service'
+
+{ dashboardViews } = require 'shared/helpers/discussion'
 
 $controller = ($rootScope, $routeParams, $mdMedia) ->
 
@@ -31,36 +33,7 @@ $controller = ($rootScope, $routeParams, $mdMedia) ->
   filters = (filters) =>
     ['only_threads_in_my_groups', 'show_opened', @filter].concat(filters)
 
-  @views =
-    proposals: ThreadQueryService.queryFor
-      name:    viewName("proposals")
-      filters: filters('show_proposals')
-    today:     ThreadQueryService.queryFor
-      name:    viewName("today")
-      from:    '1 second ago'
-      to:      '-10 year ago' # into the future!
-      filters: filters('hide_proposals')
-    yesterday: ThreadQueryService.queryFor
-      name:    viewName("yesterday")
-      from:    '1 day ago'
-      to:      '1 second ago'
-      filters: filters('hide_proposals')
-    thisweek: ThreadQueryService.queryFor
-      name:    viewName("thisWeek")
-      from:    '1 week ago'
-      to:      '1 day ago'
-      filters: filters('hide_proposals')
-    thismonth: ThreadQueryService.queryFor
-      name:    viewName("thisMonth")
-      from:    '1 month ago'
-      to:      '1 week ago'
-      filters: filters('hide_proposals')
-    older: ThreadQueryService.queryFor
-      name:    viewName("older")
-      from:    '3 month ago'
-      to:      '1 month ago'
-      filters: filters('hide_proposals')
-
+  @views = dashboardViews()
   @viewNames = _.keys(@views)
   @loadingViewNames = _.take @viewNames, 3
 

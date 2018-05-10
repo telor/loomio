@@ -4,8 +4,8 @@ module.exports =
   class RestfulClient
     defaultParams: {}
     currentUpload: null
-    apiHost: 'http://localhost:3000'
-    apiPrefix: "/api/v1"
+    apiHost: 'http://loomio.org'
+    apiPrefix: "api/v1"
 
     # override these to set default actions
     onPrepare: (request)  -> request
