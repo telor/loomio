@@ -24,16 +24,7 @@ $controller = ($rootScope, $routeParams, $mdMedia) ->
     page: 'dashboardPage'
     filter: $routeParams.filter
 
-  viewName = (name) =>
-    if @filter == 'show_muted'
-      "dashboard#{_.capitalize(name)}Muted"
-    else
-      "dashboard#{_.capitalize(name)}"
-
-  filters = (filters) =>
-    ['only_threads_in_my_groups', 'show_opened', @filter].concat(filters)
-
-  @views = dashboardViews()
+  @views = dashboardViews(@filter)
   @viewNames = _.keys(@views)
   @loadingViewNames = _.take @viewNames, 3
 

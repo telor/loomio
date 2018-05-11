@@ -32,7 +32,6 @@ RootStack = createStackNavigator(
   navigationOptions: ->
     headerStyle:
       backgroundColor: '#FFA726'
-    title: 'Loomio'
     headerTintColor: 'white'
 )
 

@@ -41,4 +41,5 @@ client/tests_output
 client/angular/test/screenshots
 client/angular/test/nightwatch/plugins
 client/angular/test/log
+client/react-native/node_modules
 client/react-native/dist

@@ -1,7 +1,6 @@
 LmoUrlService = require 'shared/services/lmo_url_service'
 AppConfig     = require 'shared/record_store/restful_client'
 { KeepAwake } = require 'expo'
-_             = require 'lodash'
 
 module.exports = ->
   KeepAwake() if __DEV__
