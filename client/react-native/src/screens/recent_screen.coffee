@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 React = require 'react'
 { View, Text, ActivityIndicator } = require 'react-native'
 DiscussionPreviewCollection = require '../components/discussion/preview_collection'
@@ -19,15 +21,17 @@ module.exports = class RecentScreen extends React.Component
   render: ->
     <View>
       <Text>Dashboard!</Text>
-      {<ActivityIndicator size="large" /> if !@state.loaded}
-      <DiscussionPreviewCollection view={@state.views.proposals} />
-      <DiscussionPreviewCollection view={@state.views.today} />
-      <DiscussionPreviewCollection view={@state.views.yesterday} />
-      <DiscussionPreviewCollection view={@state.views.thisweek} />
-      <DiscussionPreviewCollection view={@state.views.thismonth} />
-      <DiscussionPreviewCollection view={@state.views.older} />
+      {
+        if @state.loaded
+          _.compact _.map _.keys(@state.views), (viewName) =>
+            view = @state.views[viewName]
+            <DiscussionPreviewCollection key={view.name()} view={view} /> if view.any()
+        else
+          <ActivityIndicator size="large" />
+      }
     </View>
 
-  willMountComponent: ->
-    @state.loader.fetchRecords().then(console.log).finally ->
+  componentDidMount: ->
+    @state.loader.fetchRecords().finally =>
+      console.log 'loaded!'
       @setState(loaded: true)

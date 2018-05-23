@@ -22,7 +22,6 @@ module.exports = class RecordLoader
       path:   @path
       params: _.defaults({}, opts, @params)
     .then (data) =>
-      console.log(data)
       records = data[@collection] || []
       @numLoaded += records.length
       @numRequested += (opts.per || @params.per)

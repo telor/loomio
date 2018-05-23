@@ -8,6 +8,7 @@ module.exports = new class ThreadQueryService
 
   queryFor: (options = {}) ->
     Records.discussions.collection.removeDynamicView(options.name) if options.overwrite
+    name:    -> options.name
     threads: -> applyFilters(options).data()
     length:  -> @threads().length
     any:     -> @length() > 0
@@ -40,12 +41,12 @@ module.exports = new class ThreadQueryService
           when 'hide_muted'     then view.applyWhere (thread) -> thread.volume() != 'mute'
           when 'show_proposals' then view.applyWhere (thread) -> thread.hasDecision()
           when 'hide_proposals' then view.applyWhere (thread) -> !thread.hasDecision()
-          when 'only_threads_in_my_groups'
-            userGroupIds = Session.user().groupIds()
-            view.applyFind $or: [
-              {guestGroupId: {$in: userGroupIds}}
-              {groupId: {$in: userGroupIds}}
-            ]
+          # when 'only_threads_in_my_groups'
+          #   userGroupIds = Session.user().groupIds()
+          #   view.applyFind $or: [
+          #     {guestGroupId: {$in: userGroupIds}}
+          #     {groupId: {$in: userGroupIds}}
+          #   ]
 
     view
 

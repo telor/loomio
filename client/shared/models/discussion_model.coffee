@@ -76,7 +76,7 @@ module.exports = class DiscussionModel extends BaseModel
       poll.isActive()
 
   hasActivePoll: ->
-    _.any @activePolls()
+    _.some @activePolls()
 
   hasDecision: ->
     @hasActivePoll()

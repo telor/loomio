@@ -1,6 +1,5 @@
 React          = require 'react'
 { View, Text } = require 'react-native'
-{ view, icon, content } = require './preview.styles'
 { timeFromNowInWords }  = require 'shared/helpers/filters'
 
 module.exports = class DiscussionPreview extends React.Component

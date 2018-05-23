@@ -1,12 +1,13 @@
 React = require 'react'
 { View, Text, FlatList } = require 'react-native'
 DiscussionPreview = require './preview'
+Records = require 'shared/services/records'
 
 module.exports = class DiscussionPreviewCollection extends React.Component
   render: ->
     <View>
       <View>
-        <Text>{@props.view.name}</Text>
+        <Text>{@props.view.name()}</Text>
       </View>
       <View>
         <FlatList
