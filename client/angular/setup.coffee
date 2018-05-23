@@ -30,8 +30,6 @@ module.exports =
 
 setupAngularScroll = ->
   ScrollService.setScrollMethod (elem, container, options = {}) ->
-    elem = document.querySelector(target)
-    container = document.querySelector(options.container or '.lmo-main-content')
     return unless elem and container
     setTimeout ->
       options.offset = document.documentElement.clientHeight - (options.offset or 100) if options.bottom
