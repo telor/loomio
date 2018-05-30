@@ -17,26 +17,38 @@ angular.module('loomioApp').directive 'pollCommonDetailsPanel', ->
       canPerform: -> AbilityService.canTranslate($scope.poll)
       perform:    -> $scope.poll.translate(Session.user().locale)
     ,
-      name: 'add_resource'
-      icon: 'mdi-attachment'
-      canPerform: -> AbilityService.canAdministerPoll($scope.poll)
-      perform:    -> ModalService.open 'DocumentModal', doc: ->
-        Records.documents.build
-          modelId:   $scope.poll.id
-          modelType: 'Poll'
+      name: 'announce_poll'
+      icon: 'mdi-account-plus'
+      canPerform: -> AbilityService.canAdministerPoll($scope.poll) and $scope.poll.isActive()
+      perform:    -> ModalService.open 'AnnouncementModal', announcement: ->
+        Records.announcements.buildFromModel($scope.poll)
     ,
-      name: 'copy_url'
-      icon: 'mdi-link'
-      canPerform: -> clipboard.supported
-      perform:    ->
-        clipboard.copyText(LmoUrlService.poll($scope.poll, {}, absolute: true))
-        FlashService.success("action_dock.poll_copied")
-    ,
+    #   name: 'add_resource'
+    #   icon: 'mdi-attachment'
+    #   canPerform: -> AbilityService.canAdministerPoll($scope.poll)
+    #   perform:    -> ModalService.open 'DocumentModal', doc: ->
+    #     Records.documents.build
+    #       modelId:   $scope.poll.id
+    #       modelType: 'Poll'
+    # ,
+    #   name: 'copy_url'
+    #   icon: 'mdi-link'
+    #   canPerform: -> clipboard.supported
+    #   perform:    ->
+    #     clipboard.copyText(LmoUrlService.poll($scope.poll, {}, absolute: true))
+    #     FlashService.success("action_dock.poll_copied")
+    # ,
       name: 'edit_poll'
       icon: 'mdi-pencil'
       canPerform: -> AbilityService.canEditPoll($scope.poll)
       perform:    -> ModalService.open 'PollCommonEditModal', poll: -> $scope.poll
-    ]
+    ,
+      name: 'show_history'
+      icon: 'mdi-history'
+      canPerform: -> $scope.poll.edited()
+      perform:    -> ModalService.open 'RevisionHistoryModal', model: -> $scope.poll
+
+  ]
 
     listenForTranslations($scope)
     listenForReactions($scope, $scope.poll)

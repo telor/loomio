@@ -46,4 +46,5 @@ browserifyOpts = ->
   entries: paths.vue.main
   extensions: [".coffee"]
   paths: ['./', './node_modules']
+  extensions: ['.coffee', '.js']
   transform: [coffeeify, vueify]

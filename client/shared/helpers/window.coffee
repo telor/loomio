@@ -28,8 +28,9 @@ module.exports =
     _.extend window._, require 'shared/helpers/lodash_ext'
 
   initServiceWorker: ->
-    if document.location.protocol.match(/https/) && navigator.serviceWorker?
-      navigator.serviceWorker.register(document.location.origin + '/service-worker.js', scope: './')
+    version = document.querySelector('meta[name=version]').content
+    if (version == 'development' || document.location.protocol.match(/https/)) && navigator.serviceWorker?
+      navigator.serviceWorker.register("#{document.location.origin}/service-worker.js?#{version}", scope: "./")
 
   triggerResize: (delay) ->
     setTimeout ->
@@ -61,9 +62,9 @@ hardReload = (path) ->
     window.location.reload()
 
 viewportSize = ->
-  if window.innerWidth < 480
+  if window.innerWidth < 600
     'small'
-  else if window.innerWidth < 992
+  else if window.innerWidth < 960
     'medium'
   else if window.innerWidth < 1280
     'large'

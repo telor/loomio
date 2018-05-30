@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   extend  NoSpam
   no_spam_for :name
-  
+
   MAX_AVATAR_IMAGE_SIZE_CONST = 100.megabytes
   BOT_EMAILS = {
     helper_bot: ENV['HELPER_BOT_EMAIL'] || 'contact@loomio.org',
@@ -25,9 +25,19 @@ class User < ApplicationRecord
   attr_accessor :restricted
   attr_accessor :token
   attr_accessor :membership_token
-  attr_writer :has_password
+  attr_accessor :legal_accepted
+
+  attr_writer   :has_password
+  attr_accessor :require_valid_signup
+  attr_accessor :require_recaptcha
+
+  before_save :set_legal_accepted_at, if: :legal_accepted
 
   validates :email, presence: true, email: true, length: {maximum: 200}
+
+  validates :name,               presence: true, if: :require_valid_signup
+  validates :legal_accepted,     presence: true, if: :require_legal_accepted
+  validate  :validate_recaptcha,                 if: :require_recaptcha
 
   has_attached_file :uploaded_avatar,
     styles: {
@@ -50,7 +60,6 @@ class User < ApplicationRecord
 
   validates_length_of :password, minimum: 8, allow_nil: true
   validates :password, nontrivial_password: true, allow_nil: true
-  validate  :ensure_recaptcha, if: :recaptcha
 
   has_many :admin_memberships,
            -> { where('memberships.admin = ? AND memberships.is_suspended = ?', true, false) },
@@ -76,7 +85,7 @@ class User < ApplicationRecord
            source: :group
 
   has_many :adminable_groups,
-           -> { where(archived_at: nil, type: "FormalGroup") },
+           -> { where(archived_at: nil) },
            through: :admin_memberships,
            class_name: 'Group',
            source: :group
@@ -131,11 +140,11 @@ class User < ApplicationRecord
   scope :sorted_by_name, -> { order("lower(name)") }
   scope :admins, -> { where(is_admin: true) }
   scope :coordinators, -> { joins(:memberships).where('memberships.admin = ?', true).group('users.id') }
-  scope :mentioned_in, ->(model) { where(id: model.notifications.user_mentions.pluck(:user_id)) }
   scope :verified, -> { where(email_verified: true) }
   scope :unverified, -> { where(email_verified: false) }
   scope :verified_first, -> { order(email_verified: :desc) }
-  scope :search_for, ->(query) { where("name ilike :q OR username ilike :q", q: "%#{query}%") }
+  scope :search_for, -> (q) { where("users.name ilike :first OR users.name ilike :other OR users.username ilike :first", first: "#{q}%", other:  "% #{q}%") }
+  scope :mentionable_by, -> (user) { active.verified.distinct.joins(:memberships).where("memberships.group_id": user.group_ids).where.not(id: user.id) }
 
   scope :email_when_proposal_closing_soon, -> { active.where(email_when_proposal_closing_soon: true) }
 
@@ -182,8 +191,17 @@ class User < ApplicationRecord
   #   SQL
   # }
   #
+
+  def set_legal_accepted_at
+    self.legal_accepted_at = Time.now
+  end
+
+  def require_legal_accepted
+    self.require_valid_signup && ENV['TERMS_URL']
+  end
+
   def self.email_status_for(email)
-    (verified_first.find_by(email: email) || LoggedOutUser.new).email_status
+    verified_first.find_by(email: email)&.email_status || :unused
   end
 
   define_counter_cache(:memberships_count) {|user| user.memberships.formal.count }
@@ -204,7 +222,7 @@ class User < ApplicationRecord
 
   def pending_invitation_limit
     ENV.fetch('MAX_PENDING_INVITATIONS', 100).to_i +
-    self.invited_memberships.not_pending.count     -
+    self.invited_memberships.accepted.count        -
     self.invited_memberships.pending.count
   end
 
@@ -323,13 +341,16 @@ class User < ApplicationRecord
   end
 
   protected
+
   def password_required?
     !password.nil? || !password_confirmation.nil?
   end
 
   private
 
-  def ensure_recaptcha
+  def validate_recaptcha
+    return unless ENV['RECAPTCHA_APP_KEY']
+    return if self.persisted?
     return if Clients::Recaptcha.instance.validate(self.recaptcha)
     self.errors.add(:recaptcha, I18n.t(:"user.error.recaptcha"))
   end

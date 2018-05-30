@@ -5,10 +5,10 @@ AbilityService = require 'shared/services/ability_service'
 Records        = require 'shared/services/records'
 Session        = require 'shared/services/session'
 FlashService   = require 'shared/services/flash_service'
-ScrollService  = require 'shared/services/scroll_service'
 
 { signIn }            = require 'shared/helpers/user'
 { fieldFromTemplate } = require 'shared/helpers/poll'
+{ scrollTo }          = require 'shared/helpers/layout'
 
 # a helper to aid submitting forms throughout the app
 module.exports =
@@ -17,11 +17,15 @@ module.exports =
 
   submitDiscussion: (scope, model, options = {}) ->
     submit(scope, model, _.merge(
+      submitFn: if model.isForking() then model.fork else model.save
       flashSuccess: "discussion_form.messages.#{actionName(model)}"
       failureCallback: ->
-        ScrollService.scrollTo '.lmo-validation-error__message', container: '.discussion-modal'
+        scrollTo '.lmo-validation-error__message', container: '.discussion-modal'
       successCallback: (data) ->
         _.invoke Records.documents.find(model.removedDocumentIds), 'remove'
+        if model.isForking()
+          model.forkTarget().discussion().forkedEventIds = []
+          _.invoke Records.events.find(model.forkedEventIds), 'remove'
         nextOrSkip(data, scope, model)
     , options))
 
@@ -53,6 +57,7 @@ module.exports =
       flashSuccess: "poll_#{model.pollType}_form.#{model.pollType}_#{actionName(model)}"
       prepareFn: =>
         EventBus.emit scope, 'processing'
+        model.customFields.deanonymize_after_close = model.deanonymizeAfterClose if model.anonymous
         switch model.pollType
           # for polls with default poll options (proposal, check)
           when 'proposal', 'count'
@@ -71,6 +76,12 @@ module.exports =
         nextOrSkip(data, scope, model)
       cleanupFn: ->
         EventBus.emit scope, 'doneProcessing'
+    , options))
+
+  submitMembership: (scope, model, options = {}) ->
+    submit(scope, model, _.merge(
+      flashSuccess: "membership_form.#{actionName(model)}"
+      successCallback: -> EventBus.emit scope, '$close'
     , options))
 
   upload: (scope, model, options = {}) ->
@@ -151,8 +162,8 @@ success = (scope, model, options) ->
 failure = (scope, model, options) ->
   (response) ->
     FlashService.dismiss()
-    options.failureCallback(response)                       if typeof options.failureCallback is 'function'
-    response.json().then (r) -> model.setErrors(r.errors)   if _.contains([401,422], response.status)
+    options.failureCallback(response) if typeof options.failureCallback is 'function'
+    setErrors(scope, model, response) if _.contains([401, 422], response.status)
     EventBus.emit scope, errorTypes[response.status] or 'unknownError',
       model: model
       response: response
@@ -178,10 +189,18 @@ nextOrSkip = (data, scope, model) ->
     EventBus.emit scope, 'skipStep'
 
 actionName = (model) ->
+  return 'forked' if model.isA('discussion') and model.isForking()
   if model.isNew() then 'created' else 'updated'
 
+setErrors = (scope, model, response) ->
+  response.json().then (r) ->
+    model.setErrors(r.errors)
+    scope.$apply()
+
 eventKind = (model) ->
-  return 'new_discussion' if model.isNew() and model.constructor.singular == 'discussion'
+  if model.isA('discussion') and model.isNew()
+    return if model.isForking() then 'discussion_forked' else 'new_discussion'
+
   if model.isNew()
     "#{model.constructor.singular}_created"
   else

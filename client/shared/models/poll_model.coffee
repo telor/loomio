@@ -8,6 +8,7 @@ HasDrafts        = require 'shared/mixins/has_drafts'
 HasDocuments     = require 'shared/mixins/has_documents'
 HasTranslations  = require 'shared/mixins/has_translations'
 HasGuestGroup    = require 'shared/mixins/has_guest_group'
+I18n             = require 'shared/services/i18n'
 
 module.exports = class PollModel extends BaseModel
   @singular: 'poll'
@@ -23,6 +24,9 @@ module.exports = class PollModel extends BaseModel
     HasMentions.apply @, 'details'
     HasTranslations.apply @
     HasGuestGroup.apply @
+
+  translatedPollType: ->
+    I18n.t("poll_types.#{@pollType}")
 
   draftParent: ->
     @discussion() or @author()
@@ -62,31 +66,25 @@ module.exports = class PollModel extends BaseModel
     @hasMany   'pollOptions'
     @hasMany   'stances', sortBy: 'createdAt', sortDesc: true
     @hasMany   'pollDidNotVotes'
+    @hasMany   'versions', sortBy: 'createdAt'
+
+  authorName: ->
+    @author().nameWithTitle(@)
+
+  discussionGuestGroupId: ->
+    @discussion().guestGroupId if @discussion()
 
   discussionGuestGroup: ->
     @discussion().guestGroup() if @discussion()
 
+  groupIds: ->
+    _.compact [@groupId, @guestGroupId, @discussionGuestGroupId()]
+
   reactions: ->
     @recordStore.reactions.find(reactableId: @id, reactableType: "Poll")
 
-  announcementSize: (action) ->
-    return @group().announcementRecipientsCount if @group() and @isNew()
-    switch action or @notifyAction()
-      when 'publish' then @stancesCount + @undecidedUserCount
-      when 'edit'    then @stancesCount
-      else                0
-
-  memberIds: ->
-    _.uniq if @isActive()
-      @formalMemberIds().concat @guestIds()
-    else
-      @participantIds().concat @undecidedIds()
-
   participantIds: ->
     _.pluck(@latestStances(), 'participantId')
-
-  undecidedIds: ->
-    _.pluck(@pollDidNotVotes(), 'userId')
 
   # who's voted?
   participants: ->
@@ -94,7 +92,10 @@ module.exports = class PollModel extends BaseModel
 
   # who hasn't voted?
   undecided: ->
-    _.difference(@members(), @participants())
+    if @isActive()
+      _.difference(@members(), @participants())
+    else
+      _.invoke @pollDidNotVotes(), 'user'
 
   membersCount: ->
     # NB: this won't work for people who vote, then leave the group.
@@ -173,3 +174,6 @@ module.exports = class PollModel extends BaseModel
   removeOrphanOptions: ->
     _.each @pollOptions(), (option) =>
       option.remove() unless _.includes(@pollOptionNames, option.name)
+
+  edited: ->
+    @versionsCount > 1

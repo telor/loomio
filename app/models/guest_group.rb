@@ -1,8 +1,8 @@
 class GuestGroup < Group
+  delegate :update_undecided_count, to: :target_model, allow_nil: true
 
-  # pass this through to poll
-  def update_undecided_user_count
-    Poll.find_by(guest_group_id: id)&.update_undecided_user_count
+  def id_and_subgroup_ids
+    Array(id)
   end
 
   def group_privacy=(term)

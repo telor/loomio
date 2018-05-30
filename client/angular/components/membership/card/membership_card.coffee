@@ -2,6 +2,8 @@ Records        = require 'shared/services/records'
 AbilityService = require 'shared/services/ability_service'
 ModalService   = require 'shared/services/modal_service'
 RecordLoader   = require 'shared/services/record_loader'
+I18n           = require 'shared/services/i18n'
+Records        = require 'shared/services/records'
 
 angular.module('loomioApp').directive 'membershipCard', ->
   scope: {group: '=', pending: "=?"}
@@ -11,17 +13,23 @@ angular.module('loomioApp').directive 'membershipCard', ->
   controller: ['$scope', ($scope) ->
     $scope.vars = {}
     $scope.show = ->
-      return false if $scope.recordCount() == 0
+      return false if ($scope.recordCount() == 0 && $scope.pending)
+      $scope.initialFetch() if $scope.canView()
+      $scope.canView()
+
+    $scope.plusUser = Records.users.build(avatarKind: 'mdi-plus')
+
+    $scope.canView = ->
       if $scope.pending
         AbilityService.canViewPendingMemberships($scope.group)
       else
         AbilityService.canViewMemberships($scope.group)
 
     if $scope.pending
-      $scope.cardTitle = 'membership_card.count_invitations'
+      $scope.cardTitle = 'membership_card.invitations'
       $scope.order = '-createdAt'
     else
-      $scope.cardTitle =  'membership_card.count_members'
+      $scope.cardTitle = "membership_card.#{$scope.group.targetModel().constructor.singular}_members"
       $scope.order = '-admin'
 
     $scope.recordCount = ->
@@ -36,12 +44,12 @@ angular.module('loomioApp').directive 'membershipCard', ->
       setTimeout -> document.querySelector('.membership-card__search input').focus()
 
     $scope.showLoadMore = ->
-      !$scope.loader.exhausted    &&
-      !$scope.vars.fragment       &&
+      $scope.loader.numRequested < $scope.recordCount() &&
+      !$scope.vars.fragment                             &&
       !$scope.loader.loading
 
     $scope.canAddMembers = ->
-      AbilityService.canAddMembers($scope.group)
+      AbilityService.canAddMembers($scope.group) && !$scope.pending
 
     $scope.memberships = ->
       if $scope.vars.fragment
@@ -50,9 +58,12 @@ angular.module('loomioApp').directive 'membershipCard', ->
       else
         $scope.records()
 
+    $scope.recordsDisplayed = ->
+      _.min [$scope.loader.numRequested, $scope.recordCount()]
+
     $scope.initialFetch = ->
-      $scope.loader.fetchRecords(per: 4).finally(-> $scope.fetched = true) unless $scope.fetched
-      true
+      $scope.loader.fetchRecords(per: 4) unless $scope.fetched
+      $scope.fetched = true
 
     $scope.records = ->
       if $scope.pending

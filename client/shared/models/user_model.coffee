@@ -6,7 +6,6 @@ AppConfig = require 'shared/services/app_config'
 module.exports = class UserModel extends BaseModel
   @singular: 'user'
   @plural: 'users'
-  @apiEndPoint: 'profile'
   @serializableAttributes: AppConfig.permittedParams.user
 
   relationships: ->
@@ -36,6 +35,9 @@ module.exports = class UserModel extends BaseModel
   groups: ->
     groups = _.filter @recordStore.groups.find(id: { $in: @groupIds() }), (group) -> !group.isArchived()
     _.sortBy groups, 'fullName'
+
+  formalGroups: ->
+    _.filter @groups(), (group) -> group.type == "FormalGroup"
 
   adminGroups: ->
     _.invoke @adminMemberships(), 'group'
@@ -108,6 +110,22 @@ module.exports = class UserModel extends BaseModel
 
   hasProfilePhoto: ->
     @avatarKind != 'initials'
+
+  uploadedAvatarUrl: (size = 'medium') ->
+    return @avatarUrl if typeof @avatarUrl is 'string'
+    @avatarUrl[size]
+
+  nameWithTitle: (model) ->
+    _.compact([@name, @titleFor(model)]).join(' · ')
+
+  titleFor: (model) ->
+    return unless model
+    if model.isA('group')
+      (@membershipFor(model) or {}).title
+    else if model.isA('discussion')
+      @titleFor(model.guestGroup()) or @titleFor(model.group())
+    else if model.isA('poll')
+      @titleFor(model.guestGroup()) or @titleFor(model.discussion()) or @titleFor(model.group())
 
   belongsToPayingGroup: ->
     _.any @groups(), (group) -> group.subscriptionKind == 'paid'

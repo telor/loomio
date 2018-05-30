@@ -20,14 +20,6 @@ class PollEmailInfo
     @action_name = action_name
   end
 
-  def stance_icon_for(stance_choice)
-    case stance_choice&.score.to_i
-      when 0 then "disagree"
-      when 1 then "abstain"
-      when 2 then "agree"
-    end if @poll.has_score_icons
-  end
-
   def actor
     @actor ||= if @eventable.is_a?(Stance)
       @eventable.participant_for_client
@@ -73,19 +65,19 @@ class PollEmailInfo
     "poll_mailer/#{prefix}_off.png"
   end
 
-  def links
-    {
-      target:      polymorphic_url(membership || poll, utm_hash),
-      unsubscribe: unsubscribe_url
-    }
+  def target_url(args = {})
+    polymorphic_url(membership || poll, utm_hash(args))
+  end
+
+  def unsubscribe_url
+    poll_unsubscribe_url poll, utm_hash.merge(unsubscribe_token: recipient.unsubscribe_token)
   end
 
   def utm_hash(args = {})
     {
       utm_medium: 'email',
       utm_campaign: 'poll_mailer',
-      utm_source: action_name,
-      invitation_token: @recipient.token
+      utm_source: action_name
     }.merge(args)
   end
 
@@ -95,7 +87,4 @@ class PollEmailInfo
     @membership ||= poll.guest_group.memberships.find_by(user: recipient)
   end
 
-  def unsubscribe_url
-    poll_unsubscribe_url poll, utm_hash.merge(unsubscribe_token: recipient.unsubscribe_token)
-  end
 end

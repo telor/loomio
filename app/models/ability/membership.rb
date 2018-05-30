@@ -3,11 +3,17 @@ module Ability::Membership
     super(user)
 
     can [:update], ::Membership do |membership|
-      membership.user_id == user.id
+      membership.user_id == user.id ||
+      user_is_admin_of?(membership.group_id) ||
+      user_is_admin_of?(membership.target_model.group_id)
     end
 
     can [:make_admin], ::Membership do |membership|
       user_is_admin_of?(membership.group_id)
+    end
+
+    can :resend, ::Membership do |membership|
+      !membership.accepted_at? && user == membership.inviter
     end
 
     can [:remove_admin, :destroy], ::Membership do |membership|

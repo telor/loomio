@@ -63,7 +63,7 @@ module.exports = class CommentModel extends BaseModel
     @recordStore.users.find(_.pluck(@reactions(), 'userId'))
 
   authorName: ->
-    @author().name
+    @author().nameWithTitle(@discussion()) if @author()
 
   authorUsername: ->
     @author().username
@@ -76,10 +76,3 @@ module.exports = class CommentModel extends BaseModel
 
   edited: ->
     @versionsCount > 1
-
-  attributeForVersion: (attr, version) ->
-    return '' unless version
-    if version.changes[attr]
-      version.changes[attr][1]
-    else
-      @attributeForVersion(attr, @recordStore.versions.find(version.previousId))

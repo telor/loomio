@@ -7,15 +7,22 @@ AbilityService = require 'shared/services/ability_service'
 LmoUrlService  = require 'shared/services/lmo_url_service'
 IntercomService = require 'shared/services/intercom_service'
 ModalService   = require 'shared/services/modal_service'
-I18n           = require 'shared/services/i18n'
+
+{ hardReload } = require 'shared/helpers/window'
 
 # A series of actions relating to updating the current user, such as signing in
 # or changing the app's locale
 module.exports =
-  signIn: (data, userId, afterSignIn = ->) =>
+  signIn: (data, userId, afterSignIn) =>
     Records.import(data)
-    Session.signIn(userId, LmoUrlService.params().invitation_token)
-    afterSignIn()
+    Session.signIn(userId)
+    AppConfig.pendingIdentity = data.pending_identity
+    IntercomService.fetch()
+    afterSignIn() if typeof afterSignIn is 'function'
+
+  getProviderIdentity: ->
+    validProviders = _.pluck(AppConfig.identityProviders, 'name')
+    AppConfig.pendingIdentity if _.contains(validProviders, AppConfig.pendingIdentity.identity_type)
 
   getProviderIdentity: ->
     validProviders = _.pluck(AppConfig.identityProviders, 'name')

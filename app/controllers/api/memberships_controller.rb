@@ -56,6 +56,11 @@ class API::MembershipsController < API::RestfulController
     respond_with_collection
   end
 
+  def resend
+    service.resend membership: load_resource, actor: current_user
+    respond_with_resource
+  end
+
   def make_admin
     service.make_admin(membership: load_resource, actor: current_user)
     respond_with_resource
@@ -78,18 +83,15 @@ class API::MembershipsController < API::RestfulController
   end
 
   def undecided
-    instantiate_collection { |collection| collection.undecided_for(load_and_authorize(:poll)) }
+    poll = load_and_authorize(:poll)
+    instantiate_collection { |collection| collection.where(group: poll.groups, user: poll.undecided) }
     respond_with_collection
   end
 
   private
 
   def index_scope
-    { email_user_ids: collection.pluck(:user_id) } if include_emails?
-  end
-
-  def include_emails?
-    params[:pending]
+    { email_user_ids: collection.select { |m| m.inviter_id == current_user.id }.map(&:user_id) } if params[:pending]
   end
 
   def model

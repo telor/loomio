@@ -1,6 +1,6 @@
 module.exports = (test) ->
-  loadPath: (path) ->
-    test.url "http://localhost:3000/dev/#{path}"
+  loadPath: (path, opts = {}) ->
+    test.url "http://localhost:3000/dev/#{opts.controller || 'nightwatch'}/#{path}"
 
   goTo: (path) ->
     test.url "http://localhost:3000/#{path}"
@@ -26,6 +26,7 @@ module.exports = (test) ->
     test.getLocationInView(selector, callback)
 
   ensureSidebar: ->
+    @waitFor('.navbar__left')
     test.elements 'css selector', '.md-sidenav-left', (result) =>
       if result.value.length == 0
         test.click('.navbar__sidenav-toggle')
@@ -73,5 +74,5 @@ module.exports = (test) ->
     test.acceptAlert()
     @pause()
 
-  waitFor: (selector, wait = 4000) ->
+  waitFor: (selector, wait = 6000) ->
     test.waitForElementVisible(selector, wait) if selector?

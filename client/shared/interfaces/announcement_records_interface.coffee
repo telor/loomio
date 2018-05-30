@@ -1,6 +1,18 @@
 BaseRecordsInterface = require 'shared/record_store/base_records_interface'
 AnnouncementModel    = require 'shared/models/announcement_model'
 
+kindForTarget = (target) ->
+  if _.contains(['poll_edited', 'discussion_edited'], target.kind)
+    target.kind
+  else
+    "#{eventableOrSelf(target).constructor.singular}_announced"
+
+eventableOrSelf = (model) ->
+  if model.isA?('event')
+    model.model()
+  else
+    model
+
 module.exports = class AnnouncementRecordsInterface extends BaseRecordsInterface
   model: AnnouncementModel
 
@@ -12,13 +24,9 @@ module.exports = class AnnouncementRecordsInterface extends BaseRecordsInterface
       params: params
 
   buildFromModel: (target) ->
-    model = if target.constructor.singular == 'event'
-      target.model()
-    else
-      target
     @build
-      model:     model
-      kind:      target.kind || "#{model.constructor.singular}_announced"
+      kind:  kindForTarget(target)
+      model: eventableOrSelf(target)
 
   fetchAudience: (model, kind) ->
     @remote.fetch

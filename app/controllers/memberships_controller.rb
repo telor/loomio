@@ -1,10 +1,6 @@
 class MembershipsController < ApplicationController
   include PrettyUrlHelper
 
-  rescue_from(Membership::InvitationAlreadyUsed) do |membership|
-    redirect_to membership.group
-  end
-
   def join
     session[:pending_group_token] = join_target.guest_group.token
     redirect_to back_to_url || polymorphic_url(join_target)
@@ -13,6 +9,8 @@ class MembershipsController < ApplicationController
   def show
     session[:pending_membership_token] = membership.token
     redirect_to back_to_url || polymorphic_url(membership.target_model)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to join_url(Group.find_by!(token: params[:token]))
   end
 
   private

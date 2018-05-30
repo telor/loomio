@@ -70,7 +70,7 @@ describe API::CommentsController do
           discussion.guest_group.add_member! user
 
           post :create, params: { comment: comment_params }
-          expect(response).to be_success
+          expect(response.status).to eq 200
           expect(Comment.where(body: comment_params[:body],
                                user_id: user.id)).to exist
         end
@@ -94,9 +94,9 @@ describe API::CommentsController do
             expect { post :create, params: { comment: comment_params }, format: :json }.to change { Event.where(kind: :user_mentioned).count }.by(1)
           end
 
-          it 'does not mention users not in the group' do
+          it 'invites non-members to the discussion' do
             comment_params[:body] = "Hello, @#{another_user.username}!"
-            expect { post :create, params: { comment: comment_params }, format: :json }.to_not change { Event.where(kind: :user_mentioned).count }
+            expect { post :create, params: { comment: comment_params }, format: :json }.to change { discussion.guest_group.memberships.count }.by(1)
           end
         end
       end

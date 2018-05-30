@@ -7,6 +7,16 @@ class MembershipService
     Events::InvitationAccepted.publish!(membership)
   end
 
+  def self.update(membership:, params:, actor:)
+    actor.ability.authorize! :update, membership
+
+    membership.assign_attributes(params.slice(:title))
+    return false unless membership.valid?
+    membership.save!
+
+    EventBus.broadcast 'membership_update', membership, params, actor
+  end
+
   def self.set_volume(membership:, params:, actor:)
     actor.ability.authorize! :update, membership
     if params[:apply_to_all]
@@ -16,6 +26,12 @@ class MembershipService
       membership.set_volume! params[:volume]
       membership.discussion_readers.update_all(volume: nil)
     end
+  end
+
+  def self.resend(membership:, actor:)
+    actor.ability.authorize! :resend, membership
+    EventBus.broadcast 'membership_resend', membership, actor
+    Events::MembershipResent.publish!(membership, actor)
   end
 
   def self.make_admin(membership:, actor:)

@@ -22,7 +22,7 @@ class Stance < ApplicationRecord
   alias :author :participant
 
   update_counter_cache :poll, :stances_count
-  update_counter_cache :poll, :undecided_user_count
+  update_counter_cache :poll, :undecided_count
 
   scope :latest, -> { where(latest: true) }
   scope :newest_first,   -> { order(created_at: :desc) }
@@ -40,10 +40,16 @@ class Stance < ApplicationRecord
   validate :participant_is_complete
   validates :reason, length: { maximum: 250 }
 
-  delegate :locale, to: :author
-  delegate :group, to: :poll, allow_nil: true
-  delegate :mailer, to: :poll, allow_nil: true
-  delegate :groups, to: :poll
+  delegate :locale,         to: :author
+  delegate :group,          to: :poll, allow_nil: true
+  delegate :mailer,         to: :poll, allow_nil: true
+  delegate :groups,         to: :poll
+  delegate :group_id,       to: :poll
+  delegate :guest_group,    to: :poll
+  delegate :guest_group_id, to: :poll
+  delegate :discussion_id,  to: :poll
+  delegate :members,        to: :poll
+
   alias :author :participant
 
   def parent_event
@@ -89,14 +95,6 @@ class Stance < ApplicationRecord
   end
 
   def participant_is_complete
-    return if participant.email_verified
-    if participant&.name.blank?
-      errors.add(:participant_name, I18n.t(:"activerecord.errors.messages.blank"))
-      participant.errors.add(:name, I18n.t(:"activerecord.errors.messages.blank"))
-    end
-    if participant&.email.blank?
-      errors.add(:participant_email, I18n.t(:"activerecord.errors.messages.blank"))
-      participant.errors.add(:email, I18n.t(:"activerecord.errors.messages.blank"))
-    end
+    participant.tap(&:valid?).errors.map { |key, err| errors.add(:"participant_#{key}", err)}
   end
 end

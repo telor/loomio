@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509123416) do
+ActiveRecord::Schema.define(version: 20180519045039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.index ["user_id", "user_type"], name: "index_ahoy_messages_on_user_id_and_user_type"
   end
 
-  create_table "attachments", force: :cascade do |t|
+  create_table "attachments", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "filename", limit: 255
     t.text "location"
@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.index ["private"], name: "index_discussions_on_private"
   end
 
-  create_table "documents", force: :cascade do |t|
+  create_table "documents", id: :serial, force: :cascade do |t|
     t.integer "model_id"
     t.string "model_type"
     t.string "title"
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.index ["discussion_id", "sequence_id"], name: "index_events_on_discussion_id_and_sequence_id", unique: true
     t.index ["discussion_id"], name: "index_events_on_discussion_id"
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id"
+    t.index ["kind"], name: "index_events_on_kind"
     t.index ["parent_id", "position"], name: "index_events_on_parent_id_and_position", where: "(parent_id IS NOT NULL)"
     t.index ["parent_id"], name: "index_events_on_parent_id", where: "(parent_id IS NOT NULL)"
   end
@@ -380,6 +381,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.datetime "updated_at"
     t.string "redirect"
     t.integer "code", null: false
+    t.boolean "is_reactivation", default: false, null: false
   end
 
   create_table "membership_requests", id: :serial, force: :cascade do |t|
@@ -417,6 +419,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.integer "invitation_id"
     t.string "token"
     t.datetime "accepted_at"
+    t.string "title"
     t.index ["created_at"], name: "index_memberships_on_created_at"
     t.index ["group_id", "user_id", "is_suspended", "archived_at"], name: "active_memberships"
     t.index ["group_id", "user_id"], name: "index_memberships_on_group_id_and_user_id", unique: true
@@ -526,6 +529,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.boolean "latest", default: true, null: false
     t.integer "poll_option_id"
     t.jsonb "custom_fields", default: {}, null: false
+    t.index ["poll_id"], name: "index_outcomes_on_poll_id"
   end
 
   create_table "poll_did_not_votes", id: :serial, force: :cascade do |t|
@@ -576,17 +580,18 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.jsonb "matrix_counts", default: [], null: false
     t.boolean "notify_on_participate", default: false, null: false
     t.boolean "example", default: false, null: false
-    t.integer "undecided_user_count", default: 0, null: false
+    t.integer "undecided_count", default: 0, null: false
     t.boolean "voter_can_add_options", default: false, null: false
     t.integer "guest_group_id"
     t.boolean "anonymous", default: false, null: false
+    t.integer "versions_count", default: 0
     t.index ["author_id"], name: "index_polls_on_author_id"
     t.index ["discussion_id"], name: "index_polls_on_discussion_id"
     t.index ["group_id"], name: "index_polls_on_group_id"
     t.index ["guest_group_id"], name: "index_polls_on_guest_group_id", unique: true
   end
 
-  create_table "reactions", force: :cascade do |t|
+  create_table "reactions", id: :serial, force: :cascade do |t|
     t.integer "reactable_id"
     t.integer "user_id"
     t.datetime "created_at"
@@ -718,6 +723,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.boolean "email_verified", default: false, null: false
     t.string "location", default: "", null: false
     t.datetime "last_seen_at"
+    t.datetime "legal_accepted_at"
     t.index ["deactivated_at"], name: "index_users_on_deactivated_at"
     t.index ["email"], name: "email_verified_and_unique", unique: true, where: "(email_verified IS TRUE)"
     t.index ["email"], name: "index_users_on_email"
@@ -727,7 +733,7 @@ ActiveRecord::Schema.define(version: 20180509123416) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  create_table "versions", force: :cascade do |t|
+  create_table "versions", id: :serial, force: :cascade do |t|
     t.string "item_type", limit: 255, null: false
     t.integer "item_id", null: false
     t.string "event", limit: 255, null: false

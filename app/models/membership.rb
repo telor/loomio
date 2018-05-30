@@ -26,13 +26,13 @@ class Membership < ApplicationRecord
   belongs_to :invitation
   has_many :events, as: :eventable, dependent: :destroy
 
-  scope :active,        -> { not_archived.not_pending.not_suspended }
+  scope :active,        -> { not_archived.accepted.not_suspended }
   scope :suspended,     -> { where(is_suspended: true) }
   scope :not_suspended, -> { where(is_suspended: false) }
   scope :archived,      -> { where('archived_at IS NOT NULL') }
   scope :not_archived,  -> { where(archived_at: nil) }
   scope :pending,       -> { where(accepted_at: nil) }
-  scope :not_pending,   -> { where('accepted_at IS NOT NULL') }
+  scope :accepted,      -> { where('accepted_at IS NOT NULL') }
 
   scope :guest,  -> { joins(:group).where("groups.type": "GuestGroup") }
   scope :formal, -> { joins(:group).where("groups.type": "FormalGroup") }
@@ -47,8 +47,8 @@ class Membership < ApplicationRecord
   scope :undecided_for, ->(poll) {
      joins(:user)
     .joins("LEFT OUTER JOIN stances ON stances.participant_id = users.id AND stances.poll_id = #{poll.id}")
-    .where(group: [poll.group, poll.guest_group])
-    .where('stances.id': nil)
+    .where(group: [poll.group, poll.discussion_guest_group, poll.guest_group])
+    .where('stances.id': nil).accepted
   }
 
   delegate :name, :email, to: :user, prefix: :user
@@ -62,7 +62,7 @@ class Membership < ApplicationRecord
   update_counter_cache :group, :memberships_count
   update_counter_cache :group, :pending_memberships_count
   update_counter_cache :group, :admin_memberships_count
-  update_counter_cache :group, :undecided_user_count
+  update_counter_cache :group, :undecided_count
   update_counter_cache :user,  :memberships_count
 
   before_create :set_volume

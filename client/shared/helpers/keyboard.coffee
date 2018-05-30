@@ -26,12 +26,13 @@ module.exports =
       !scope.submitIsDisabled and
       hasActiveElement(opts.element, active) and
       (event.ctrlKey or event.metaKey or opts.anyEnter) and
-      _.contains(active.classList, 'lmo-primary-form-input')
+      (opts.anyInput or _.contains(active.classList, 'lmo-primary-form-input'))
 
 keyboardShortcuts =
   73:  'pressedI'
   71:  'pressedG'
   80:  'pressedP'
+  83:  'pressedS'
   84:  'pressedT'
   27:  'pressedEsc'
   13:  'pressedEnter'

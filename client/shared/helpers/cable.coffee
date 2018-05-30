@@ -9,6 +9,8 @@ FlashService   = require 'shared/services/flash_service'
 AuthService    = require 'shared/services/auth_service'
 AbilityService = require 'shared/services/ability_service'
 
+{ hardReload } = require 'shared/helpers/window'
+
 module.exports = {
   subscribeTo: (model) ->
     subscribeTo(model)
@@ -44,7 +46,6 @@ subscribeToUser = ->
       if data.action? && !AppConfig.loggingOut
         AppConfig.loggingOut = true
         ModalService.open 'ConfirmModal', confirm: ->
-          # TODO force reload on web here
           submit:      Session.signOut
           forceSubmit: true
           text:
@@ -70,7 +71,4 @@ subscribeToApplication = ->
         FlashService.update 'global.messages.app_update', {version: data.version}, 'global.messages.reload', hardReload
 
 ensureConnection = ->
-  AppConfig.cable = AppConfig.cable or if AppConfig.invitationToken()
-    ActionCable.createConsumer("/cable?token=#{AppConfig.invitationToken()}")
-  else
-    ActionCable.createConsumer("/cable")
+  AppConfig.cable = AppConfig.cable or ActionCable.createConsumer("/cable")

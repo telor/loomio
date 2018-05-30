@@ -7,9 +7,11 @@ LmoUrlService = require 'shared/services/lmo_url_service'
 
 exceptionHandler = require 'shared/helpers/exception_handler'
 
+{ hardReload } = require 'shared/helpers/window'
+
 module.exports = new class Session
-  signIn: (userId, invitationToken) ->
-    setDefaultParams(invitation_token: invitationToken)
+  signIn: (userId) ->
+    setDefaultParams()
     return unless AppConfig.currentUserId = userId
     user = @user()
     exceptionHandler.setUserContext(_.pick(user, "email", "name", "id"))
@@ -34,7 +36,7 @@ module.exports = new class Session
   updateLocale: ->
     locale = (@user().locale || "en").toLowerCase().replace('_','-')
     I18n.useLocale(locale)
-    return if locale == "en"
+    return if momentLocaleFor(locale) == "en"
     Records.momentLocales.fetch(path: "#{momentLocaleFor(locale)}.js").then -> moment.locale(locale)
 
 setDefaultParams = (params) ->

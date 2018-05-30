@@ -33,6 +33,10 @@ module.exports = class DiscussionModel extends BaseModel
     lastItemAt: null
     title: ''
     description: ''
+    forkedEventIds: []
+
+  audienceValues: ->
+    name: @group().name
 
   audienceValues: ->
     name: @group().name
@@ -54,6 +58,7 @@ module.exports = class DiscussionModel extends BaseModel
     @belongsTo 'group'
     @belongsTo 'author', from: 'users'
     @belongsTo 'createdEvent', from: 'events'
+    @belongsTo 'forkedEvent', from: 'events'
 
   discussion: ->
     @
@@ -66,7 +71,7 @@ module.exports = class DiscussionModel extends BaseModel
     groupName: @groupName()
 
   authorName: ->
-    @author().name if @author()
+    @author().nameWithTitle(@)
 
   groupName: ->
     @group().name if @group()
@@ -196,12 +201,17 @@ module.exports = class DiscussionModel extends BaseModel
   reopen: =>
     @remote.patchMember @keyOrId(), 'reopen'
 
+  fork: =>
+    @remote.post 'fork', @serialize()
+
   edited: ->
     @versionsCount > 1
 
-  attributeForVersion: (attr, version) ->
-    return '' unless version
-    if version.changes[attr]
-      version.changes[attr][1]
-    else
-      @attributeForVersion(attr, @recordStore.versions.find(version.previousId))
+  isForking: ->
+    @forkedEventIds.length > 0
+
+  forkedEvents: ->
+    _.sortBy(@recordStore.events.find(@forkedEventIds), 'sequenceId')
+
+  forkTarget: ->
+    @forkedEvents()[0].model() if _.any @forkedEvents()

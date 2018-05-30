@@ -66,7 +66,9 @@ EventBus.configure do |config|
   end
 
   # update discussion or comment versions_count when title or description edited
-  config.listen('discussion_update', 'comment_update') { |model| model.update_versions_count }
+  config.listen('discussion_update', 'comment_update', 'poll_update') { |model| model.update_versions_count }
+
+  config.listen('membership_destroy') { |membership| Queries::OrganisationMemberships.for(membership).destroy_all }
 
   config.listen('membership_destroy') { |membership| Queries::OrganisationMemberships.for(membership).destroy_all }
 
@@ -76,16 +78,7 @@ EventBus.configure do |config|
 
   # publish reply event after comment creation
   config.listen('comment_create') { |comment| Events::CommentRepliedTo.publish!(comment) if comment.parent }
-
-  # publish mention events after model create / update
-  config.listen('comment_create',
-                'comment_update',
-                'motion_create',
-                'motion_update',
-                'discussion_create',
-                'discussion_update') do |model, actor|
-    Queries::UsersToMentionQuery.for(model).each { |user| Events::UserMentioned.publish!(model, actor, user) }
-  end
+  config.listen('comment_create') { |comment| comment.discussion.guest_group.add_member! comment.author }
 
   # update discussion importance
   config.listen('discussion_pin',
@@ -102,4 +95,7 @@ EventBus.configure do |config|
 
   # collect user deactivation response
   config.listen('user_deactivate') { |user, actor, params| UserDeactivationResponse.create(user: user, body: params[:deactivation_response]) }
+
+  # move events to new discussion on fork
+  config.listen('discussion_fork') { |source, target| DiscussionForker.new(source, target).fork! }
 end

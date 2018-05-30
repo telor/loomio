@@ -1,6 +1,6 @@
-RecordStore        = require 'shared/record_store/record_store'
-AppConfig          = require 'shared/services/app_config'
-loki               = require 'lokijs'
+RecordStore = require 'shared/record_store/record_store'
+AppConfig   = require 'shared/services/app_config'
+loki        = require 'lokijs'
 
 db      = new loki 'default.db'
 records = new RecordStore(db)

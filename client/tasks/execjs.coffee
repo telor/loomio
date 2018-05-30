@@ -29,6 +29,6 @@ module.exports =
 
 browserifyOpts = ->
   entries: paths.execjs.main
-  extensions: [".coffee"]
+  extensions: ['.coffee', '.js']
   transform: [coffeeify]
   standalone: 'execjs'
