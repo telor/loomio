@@ -118,13 +118,13 @@ class FormalGroup < Group
   def archive!
     self.update_attribute(:archived_at, DateTime.now)
     memberships.update_all(archived_at: DateTime.now)
-    subgroups.map(&:archive!)
+    subgroups.each(&:archive!)
   end
 
   def unarchive!
     self.update_attribute(:archived_at, nil)
     all_memberships.update_all(archived_at: nil)
-    all_subgroups.update_all(archived_at: nil)
+    subgroups.each(&:unarchive!)
   end
 
   def is_subgroup_of_hidden_parent?
