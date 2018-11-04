@@ -38,13 +38,13 @@ angular.module('loomioApp').directive 'newComment', ['$rootScope', 'clipboard', 
       icon: 'mdi-translate'
       canPerform: -> $scope.eventable.body && AbilityService.canTranslate($scope.eventable) && !$scope.translation
       perform:    -> $scope.eventable.translate(Session.user().locale)
-    ,
-      name: 'copy_url'
-      icon: 'mdi-link'
-      canPerform: -> clipboard.supported
-      perform:    ->
-        clipboard.copyText(LmoUrlService.event($scope.event, {}, absolute: true))
-        FlashService.success("action_dock.comment_copied")
+    # ,
+    #   name: 'copy_url'
+    #   icon: 'mdi-link'
+    #   canPerform: -> clipboard.supported
+    #   perform:    ->
+    #     clipboard.copyText(LmoUrlService.event($scope.event, {}, absolute: true))
+    #     FlashService.success("action_dock.comment_copied")
     ,
       name: 'show_history'
       icon: 'mdi-history'

@@ -4,7 +4,14 @@ LmoUrlService  = require 'shared/services/lmo_url_service'
 angular.module('loomioApp').directive 'pollCommonActionsDropdown', ->
   scope: {poll: '='}
   templateUrl: 'generated/components/poll/common/actions_dropdown/poll_common_actions_dropdown.html'
+  replace: false
   controller: ['$scope', ($scope) ->
+    $scope.pollHasActions = ->
+      AbilityService.canEditPoll($scope.poll)  ||
+      AbilityService.canClosePoll($scope.poll) ||
+      AbilityService.canDeletePoll($scope.poll)||
+      AbilityService.canExportPoll($scope.poll)
+
     $scope.canEditPoll = ->
       AbilityService.canEditPoll($scope.poll)
 

@@ -1,4 +1,26 @@
-.poll-created
+.poll-created.lmo-card-pad-top
+  %poll_common_set_outcome_panel{poll: "eventable"}
+
+  .lmo-flex.lmo-flex__space-between.lmo-flex__center
+    %h1.poll-common-card__title{ng-if: "!translation"} {{eventable.title}}
+    %poll_common_actions_dropdown{poll: "eventable"}
+
+  %h3.lmo-h1.poll-common-card__title{ng-if: "eventable.translation"}
+    %translation{model: "eventable", field: "title"}
+
+  %poll_common_outcome_panel{poll: "eventable", ng-if: "eventable.outcome()"}
+  %poll_common_details_panel{poll: "eventable"}
+
+  .poll-common-card__results-shown{ng-if: "showResults()"}
+    %poll_common_directive{poll: "eventable", name: "chart_panel"}
+    %poll_common_add_option_button{poll: "eventable"}
+    %poll_common_percent_voted{poll: "eventable"}
+
+  %poll_common_action_panel{poll: "eventable"}
+
+  .poll-common-card__results-shown{ng-if: "showResults()"}
+    %poll_common_votes_panel{poll: "eventable"}
+
   .lmo-md-actions
     %reactions_display{model: "eventable"}
     %action_dock{model: "eventable", actions: "actions"}

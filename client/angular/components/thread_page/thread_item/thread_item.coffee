@@ -14,7 +14,7 @@ angular.module('loomioApp').directive 'threadItem', ['$compile', ($compile) ->
   templateUrl: 'generated/components/thread_page/thread_item/thread_item.html'
 
   link: (scope, element, attrs) ->
-    if scope.event.isSurface() && scope.eventWindow.useNesting
+    if scope.event.isSurface() && scope.eventWindow.useNesting && scope.event.kind != "poll_created"
       $compile("<event-children discussion=\"eventWindow.discussion\" parent_event=\"event\" parent_event_window=\"eventWindow\"></event-children><add-comment-panel parent_event=\"event\" event_window=\"eventWindow\"></add-comment-panel>")(scope, (cloned, scope) -> element.append(cloned))
 
   controller: ['$scope', ($scope) ->

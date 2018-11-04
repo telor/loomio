@@ -1,0 +1,10 @@
+.timeline-card.lmo-card
+  %h2.lmo-card-heading{translate: "timeline_card.title"}
+  .timeline-card__polls
+    .timeline-card__item
+      Opening Context by john gieryn
+    .timeline-card__item{ng-repeat: "event in events() track by event.id"}
+      %poll_common_preview{ng-if: "event.kind == 'poll_created'", event: "event", poll: "event.model()"}
+      .outcome-preview{ng-if: "event.kind == 'outcome_created'"}
+        Outcome by {{event.actor().name}}
+  %loading{ng-if: "fetchRecordsExecuting"}

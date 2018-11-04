@@ -23,7 +23,7 @@ module.exports =
       chooseComplete: (_, pollType) ->
         scope.poll.pollType = pollType
       saveComplete: (_, event) ->
-        LmoUrlService.goTo LmoUrlService.poll(event.model())
+        LmoUrlService.goTo LmoUrlService.event(event)
         options.afterSaveComplete(event) if typeof options.afterSaveComplete is 'function'
 
   applyDiscussionStartSequence: (scope, options = {}) ->

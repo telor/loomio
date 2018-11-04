@@ -1,7 +1,7 @@
 Session = require 'shared/services/session'
 
 angular.module('loomioApp').directive 'pollCommonPreview', ->
-  scope: {poll: '=', displayGroupName: '=?'}
+  scope: {poll: '=', event: '=?', displayGroupName: '=?'}
   templateUrl: 'generated/components/poll/common/preview/poll_common_preview.html'
   controller: ['$scope', ($scope) ->
 
