@@ -1,9 +1,9 @@
 proposal:
-  poll_options_attributes:
-    - name:                "agree"
-    - name:                "abstain"
-    - name:                "disagree"
-    - name:                "block"
+  option_names:
+    consensus:             ['agree', 'abstain', 'disagree', 'block']
+    clear:                 ['yes', 'no']
+    reactions:             ['probably', 'unsure', 'unlikely']
+    objections:            ['none', 'objection']
   chart_type:              pie
   material_icon:           mdi-thumbs-up-down
   has_option_icons:        true
@@ -21,9 +21,8 @@ proposal:
     - priority_last
 
 count:
-  poll_options_attributes:
-    - name:               "yes"
-    - name:               "no"
+  option_names:
+    original: ['yes', 'no']
   chart_type:             progress
   material_icon:          mdi-check-circle
   has_option_icons:       true
@@ -39,7 +38,6 @@ count:
     - priority_last
 
 poll:
-  poll_options_attributes: []
   chart_type:         bar
   material_icon:      mdi-poll
   can_add_options:    true
@@ -52,7 +50,6 @@ poll:
     - oldest_first
 
 dot_vote:
-  poll_options_attributes: []
   chart_type:              bar
   material_icon:           mdi-chart-bar-stacked
   can_add_options:         true
@@ -67,7 +64,6 @@ dot_vote:
     - oldest_first
 
 score:
-  poll_options_attributes: []
   chart_type:              bar
   material_icon:           mdi-chart-gantt
   can_add_options:         true
@@ -82,7 +78,6 @@ score:
     - oldest_first
 
 meeting:
-  poll_options_attributes: []
   chart_type:              matrix
   material_icon:           mdi-calendar-question
   can_add_options:         true
@@ -100,7 +95,6 @@ meeting:
     - oldest_first
 
 ranked_choice:
-  poll_options_attributes: []
   chart_type:              bar
   material_icon:           mdi-format-list-numbers
   can_add_options:         true
